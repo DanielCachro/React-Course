@@ -1,0 +1,1 @@
+"use strict";var e=e=>e,t=e,r=e,s=e,o=e,i=e,p=e;exports.$$=p,exports.MillionLintProvider=e=>e.children,exports.init=s,exports.registerMetadata=r,exports.reset=t,exports.useCapture=o,exports.useCount=i;

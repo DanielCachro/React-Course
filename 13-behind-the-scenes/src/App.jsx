@@ -9,9 +9,9 @@ function App() {
 	log('<App /> rendered')
 	const [chosenCount, setChosenCount] = useState(0)
 
-  function handleSetCount(newCount) {
-    setChosenCount(newCount)
-  }
+	function handleSetCount(newCount) {
+		setChosenCount(newCount)
+	}
 
 	return (
 		<>
