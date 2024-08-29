@@ -1,5 +1,3 @@
-
-
 export default function Input({label, id, error, ...props}) {
 	return (
 		<div className='control no-margin'>
@@ -9,4 +7,3 @@ export default function Input({label, id, error, ...props}) {
 		</div>
 	)
 }
-

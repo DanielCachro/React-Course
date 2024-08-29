@@ -1,3 +1,5 @@
+
+
 export function isEmail(value) {
   return value.includes('@');
 }
@@ -13,3 +15,5 @@ export function hasMinLength(value, minLength) {
 export function isEqualsToOtherValue(value, otherValue) {
   return value === otherValue;
 }
+
+
