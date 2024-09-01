@@ -4,6 +4,8 @@ export const CartContext = createContext({
 	items: [],
 	addItemToCart: () => {},
 	removeItemFromCart: () => {},
+	setItemQty: () => {},
+	calculatePrice: () => {},
 })
 
 export default function CartContextProvider({children}) {
@@ -25,13 +27,30 @@ export default function CartContextProvider({children}) {
 	}
 
 	function handleRemoveItemFromCart(id) {
-		setItems(items => items.filter(item => item.id !== id))
+		setItems(prevItems => prevItems.filter(prevItem => prevItem.id !== id))
+	}
+
+	function handleSetItemQty(id, qty) {
+		qty > 0
+			? setItems(prevItems => prevItems.map(prevItem => (prevItem.id === id ? {...prevItem, qty: qty} : prevItem)))
+			: handleRemoveItemFromCart(id)
+	}
+
+	function handleCalculatePrice() {
+		const price =
+			items.length !== 0
+				? items.map(item => +item.price * +item.qty).reduce((acc, currentValue) => acc + currentValue)
+				: 0
+
+		return price.toFixed(2)
 	}
 
 	const ctxValue = {
 		items: items,
 		addItemToCart: handleAddItemToCart,
 		removeItemFromCart: handleRemoveItemFromCart,
+		setItemQty: handleSetItemQty,
+		calculatePrice: handleCalculatePrice,
 	}
 
 	return <CartContext.Provider value={ctxValue}>{children}</CartContext.Provider>

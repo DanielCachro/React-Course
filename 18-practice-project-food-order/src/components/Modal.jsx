@@ -1,6 +1,7 @@
 import {useEffect, useRef} from 'react'
+import {createPortal} from 'react-dom'
 
-export default function Modal({open, children, onClose, onSubmit, showCloseBtn}) {
+export default function Modal({open, children, onClose, onSubmit, title, showCloseBtn, submitBtnText}) {
 	const dialog = useRef()
 
 	useEffect(() => {
@@ -15,20 +16,22 @@ export default function Modal({open, children, onClose, onSubmit, showCloseBtn})
 		dialog.current.close()
 	}
 
-	return (
+	return createPortal(
 		<dialog className='modal' ref={dialog} onClose={onClose}>
+			<h2>{title}</h2>
 			{children}
 
 			<p className='modal-actions'>
 				{showCloseBtn && (
-					<button className='text-button' onClick={handleClose}>
+					<button type='button' className='text-button' onClick={handleClose}>
 						Close
 					</button>
 				)}
-				<button className='button' onClick={onSubmit}>
-					Submit
+				<button type='button' className='button' onClick={onSubmit}>
+					{submitBtnText ? submitBtnText : 'Submit'}
 				</button>
 			</p>
-		</dialog>
+		</dialog>,
+		document.getElementById('modal')
 	)
 }
