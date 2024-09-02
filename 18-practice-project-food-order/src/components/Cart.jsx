@@ -3,8 +3,9 @@ import CartItem from './CartItem'
 import {useContext} from 'react'
 import {CartContext} from '../store/cart-context'
 
-export default function Cart({open, onClose}) {
+export default function Cart({open, onClose, onSubmit}) {
 	const {items, setItemQty, calculatePrice} = useContext(CartContext)
+	const isSubmitDisabled = !items.length
 	const price = calculatePrice()
 
 	function CartContent() {
@@ -35,7 +36,16 @@ export default function Cart({open, onClose}) {
 	return (
 		<>
 			{open && (
-				<Modal open={open} showCloseBtn={true} onClose={onClose} title='Your Cart' submitBtnText='Go to Checkout'>
+				<Modal
+					open={open}
+					title='Your Cart'
+					showCloseBtn={true}
+					onClose={onClose}
+					onSubmit={() => {
+						items.length !== 0 ? onSubmit() : null
+					}}
+					submitBtnText='Go to Checkout'
+					submitBtnDisabled={isSubmitDisabled}>
 					<div className='cart'>
 						<CartContent />
 					</div>

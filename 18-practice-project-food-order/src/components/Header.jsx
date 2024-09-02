@@ -4,7 +4,8 @@ import {CartContext} from '../store/cart-context'
 
 export default function Header({onOpenCart}) {
 	const {items} = useContext(CartContext)
-	const itemsQty = items.map(item => item.qty).reduce((acc, currentValue) => acc + currentValue)
+	const itemsQty =
+		items.length !== 0 ? items.map(item => item.qty).reduce((acc, currentValue) => acc + currentValue) : 0
 
 	return (
 		<div id='main-header'>
