@@ -1,6 +1,6 @@
 export async function fetchMeals() {
 	const response = await fetch('http://localhost:3000/meals')
-	const resData = response.json()
+	const resData = await response.json()
 
 	if (!response.ok) {
 		throw new Error('Failed to fetch meals.')
@@ -10,7 +10,6 @@ export async function fetchMeals() {
 }
 
 export async function postOrder(cart, form) {
-	console.log({order: {items: cart, customer: form}})
 	const response = await fetch('http://localhost:3000/orders', {
 		method: 'POST',
 		body: JSON.stringify({order: {items: cart, customer: form}}),

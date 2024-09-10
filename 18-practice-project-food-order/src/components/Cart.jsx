@@ -1,12 +1,12 @@
-import Modal from './Modal'
+import Modal from './UI/Modal'
 import CartItem from './CartItem'
 import {useContext} from 'react'
 import {CartContext} from '../store/cart-context'
 
 export default function Cart({open, onClose, onSubmit}) {
-	const {items, setItemQty, calculatePrice} = useContext(CartContext)
-	const isSubmitDisabled = !items.length
-	const price = calculatePrice()
+	const {items, setItemQty, calculateCartPrice} = useContext(CartContext)
+	const isSubmitBtnDisabled = !items.length
+	const price = calculateCartPrice()
 
 	function CartContent() {
 		if (items.length !== 0) {
@@ -34,23 +34,19 @@ export default function Cart({open, onClose, onSubmit}) {
 	}
 
 	return (
-		<>
-			{open && (
-				<Modal
-					open={open}
-					title='Your Cart'
-					showCloseBtn={true}
-					onClose={onClose}
-					onSubmit={() => {
-						items.length !== 0 ? onSubmit() : null
-					}}
-					submitBtnText='Go to Checkout'
-					submitBtnDisabled={isSubmitDisabled}>
-					<div className='cart'>
-						<CartContent />
-					</div>
-				</Modal>
-			)}
-		</>
+		<Modal
+			open={open}
+			title='Your Cart'
+			showCloseBtn={true}
+			onClose={onClose}
+			onSubmit={() => {
+				items.length !== 0 ? onSubmit() : null
+			}}
+			submitBtnText='Go to Checkout'
+			submitBtnDisabled={isSubmitBtnDisabled}>
+			<div className='cart'>
+				<CartContent />
+			</div>
+		</Modal>
 	)
 }

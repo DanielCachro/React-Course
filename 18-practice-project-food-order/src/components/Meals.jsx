@@ -24,10 +24,12 @@ export default function Meals() {
 	}, [])
 
 	return (
-		<div id='meals'>
-			{isFetching && <p>Fetching meals...</p>}
-			{!error && meals.map(meal => <MealCard key={meal.id} meal={meal} />)}
-			{error && <p className='error'>{error}</p>}
-		</div>
+		<>
+			<ul id='meals'>
+				{isFetching && <li>Fetching meals...</li>}
+				{!error && meals.map(meal => <MealCard key={meal.id} meal={meal} />)}
+				{error && <li className='error'>{error}</li>}
+			</ul>
+		</>
 	)
 }

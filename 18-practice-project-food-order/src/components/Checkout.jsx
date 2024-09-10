@@ -1,4 +1,4 @@
-import Modal from './Modal'
+import Modal from './UI/Modal'
 import {useContext, useRef, useState} from 'react'
 import {CartContext} from '../store/cart-context'
 
@@ -8,10 +8,10 @@ import FormField from './FormField'
 import {postOrder} from '../http'
 
 export default function Checkout({open, onClose, onSubmit}) {
-	const {items, calculatePrice} = useContext(CartContext)
+	const {items, calculateCartPrice} = useContext(CartContext)
 	const [isFetching, setIsFetching] = useState(false)
 	const [error, setError] = useState()
-	const price = calculatePrice()
+	const price = calculateCartPrice()
 	const formRef = useRef()
 
 	const SignupSchema = Yup.object().shape({
@@ -83,12 +83,12 @@ export default function Checkout({open, onClose, onSubmit}) {
 						handlePostOrder(items, values)
 					}}>
 					<Form>
-						<FormField name='name' id='name' label='Full Name' type='text' />
-						<FormField name='email' id='email' label='E-mail' type='email' />
-						<FormField name='street' id='street' label='Street' type='text' />
+						<FormField name='name' id='name' label='Full Name' type='text' required />
+						<FormField name='email' id='email' label='E-mail' type='email' required />
+						<FormField name='street' id='street' label='Street' type='text' required />
 						<div className='control-row'>
-							<FormField name='postal-code' id='postal-code' label='Postal Code' type='text' />
-							<FormField name='city' id='city' label='City' type='text' />
+							<FormField name='postal-code' id='postal-code' label='Postal Code' type='text' required />
+							<FormField name='city' id='city' label='City' type='text' required />
 						</div>
 					</Form>
 				</Formik>
@@ -96,5 +96,5 @@ export default function Checkout({open, onClose, onSubmit}) {
 		)
 	}
 
-	return <>{open && <ModalContent />}</>
+	return <ModalContent />
 }

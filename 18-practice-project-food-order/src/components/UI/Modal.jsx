@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'react'
 import {createPortal} from 'react-dom'
+import Button from './Button'
 
 export default function Modal({
 	open,
@@ -32,13 +33,13 @@ export default function Modal({
 
 			<p className='modal-actions'>
 				{showCloseBtn && (
-					<button type='button' className='text-button' onClick={handleClose}>
+					<Button type='button' onClick={handleClose} textOnly>
 						Close
-					</button>
+					</Button>
 				)}
-				<button type='button' className='button' onClick={onSubmit} disabled={submitBtnDisabled}>
+				<Button type='button' onClick={onSubmit} disabled={submitBtnDisabled}>
 					{submitBtnText ? submitBtnText : 'Submit'}
-				</button>
+				</Button>
 			</p>
 		</dialog>,
 		document.getElementById('modal')
