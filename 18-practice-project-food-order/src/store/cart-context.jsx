@@ -5,6 +5,7 @@ export const CartContext = createContext({
 	addItem: item => {},
 	removeItem: id => {},
 	setItemQty: (id, qty) => {},
+	clearCart: () => {},
 	calculateCartPrice: () => {},
 })
 
@@ -33,6 +34,10 @@ export default function CartContextProvider({children}) {
 		}
 	}
 
+	function clearCart() {
+		setItems([])
+	}
+
 	function calculateCartPrice() {
 		let price =
 			items.length !== 0
@@ -48,6 +53,7 @@ export default function CartContextProvider({children}) {
 		addItem,
 		removeItem,
 		setItemQty,
+		clearCart,
 		calculateCartPrice,
 	}
 

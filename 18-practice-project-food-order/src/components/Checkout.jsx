@@ -1,16 +1,15 @@
 import Modal from './UI/Modal'
-import {useContext, useRef, useState} from 'react'
+import {useContext, useEffect, useRef} from 'react'
+import {useHttp} from './hooks/useHttp'
 import {CartContext} from '../store/cart-context'
 
 import {Formik, Form} from 'formik'
 import * as Yup from 'yup'
 import FormField from './FormField'
-import {postOrder} from '../http'
 
 export default function Checkout({open, onClose, onSubmit}) {
-	const {items, calculateCartPrice} = useContext(CartContext)
-	const [isFetching, setIsFetching] = useState(false)
-	const [error, setError] = useState()
+	const {items, clearCart, calculateCartPrice} = useContext(CartContext)
+	const {data, error, isFetching, sendRequest} = useHttp()
 	const price = calculateCartPrice()
 	const formRef = useRef()
 
@@ -25,29 +24,28 @@ export default function Checkout({open, onClose, onSubmit}) {
 		city: Yup.string().trim().min(2, 'Too Short!').max(50, 'Too Long!').required('Field is required!'),
 	})
 
-	const handleSubmit = () => {
-		if (formRef.current) {
-			formRef.current.handleSubmit()
-		}
+	function handleSubmit(cart, form) {
+		sendRequest('http://localhost:3000/orders', {
+			method: 'POST',
+			body: JSON.stringify({order: {items: cart, customer: form}}),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 	}
 
-	async function handlePostOrder(cart, form) {
-		setIsFetching(true)
-		try {
-			await postOrder(cart, form)
+	useEffect(() => {
+		if (data && !error) {
+			clearCart()
 			onSubmit()
-			setIsFetching(false)
-		} catch (error) {
-			setError(error)
 		}
-		setIsFetching(false)
-	}
+	}, [data, error])
 
 	function ModalContent() {
 		if (error) {
 			return (
 				<Modal open={open} title='Failed to submit order' onClose={onClose} onSubmit={onClose} submitBtnText='Okay'>
-					<p>{error.message}</p>
+					<p>{error}</p>
 				</Modal>
 			)
 		}
@@ -66,7 +64,11 @@ export default function Checkout({open, onClose, onSubmit}) {
 				title='Checkout'
 				showCloseBtn={true}
 				onClose={onClose}
-				onSubmit={handleSubmit}
+				onSubmit={() => {
+					if (formRef.current) {
+						formRef.current.handleSubmit()
+					}
+				}}
 				submitBtnText='Submit Order'>
 				<p>{`Total Ammount: $${price}`}</p>
 				<Formik
@@ -80,7 +82,7 @@ export default function Checkout({open, onClose, onSubmit}) {
 					}}
 					validationSchema={SignupSchema}
 					onSubmit={values => {
-						handlePostOrder(items, values)
+						handleSubmit(items, values)
 					}}>
 					<Form>
 						<FormField name='name' id='name' label='Full Name' type='text' required />

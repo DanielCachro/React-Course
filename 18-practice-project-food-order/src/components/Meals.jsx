@@ -1,27 +1,13 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import MealCard from './MealCard'
-import {fetchMeals} from '../http'
+import {useHttp} from './hooks/useHttp'
 
 export default function Meals() {
-	const [meals, setMeals] = useState([])
-	const [error, setError] = useState('')
-	const [isFetching, setIsFetching] = useState(false)
+	const {data: meals, error, isFetching, sendRequest} = useHttp([])
 
 	useEffect(() => {
-		async function getMeals() {
-			setIsFetching(true)
-			try {
-				const meals = await fetchMeals()
-				setMeals(meals)
-				setIsFetching(false)
-			} catch (error) {
-				setError(error.message)
-			}
-			setIsFetching(false)
-		}
-
-		getMeals()
-	}, [])
+		sendRequest('http://localhost:3000/meals')
+	}, [sendRequest])
 
 	return (
 		<>
