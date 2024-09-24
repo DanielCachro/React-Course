@@ -1,13 +1,15 @@
 import {useSelector} from 'react-redux'
+
 import Cart from './components/Cart/Cart'
 import Layout from './components/Layout/Layout'
 import Products from './components/Shop/Products'
 
 function App() {
-	const isCartOpen = useSelector(state => state.cart.isOpen)
+	const showCart = useSelector(state => state.ui.cartIsVisible)
+
 	return (
 		<Layout>
-			{isCartOpen && <Cart />}
+			{showCart && <Cart />}
 			<Products />
 		</Layout>
 	)
