@@ -5,9 +5,7 @@ import Cart from './components/Cart/Cart'
 import Layout from './components/Layout/Layout'
 import Products from './components/Shop/Products'
 import Notification from './components/UI/Notification'
-import {sendCartData} from './store/cart-slice'
-
-let isInitial = true
+import {sendCartData, fetchCartData} from './store/cart-actions'
 
 function App() {
 	const dispatch = useDispatch()
@@ -16,12 +14,13 @@ function App() {
 	const notification = useSelector(state => state.ui.notification)
 
 	useEffect(() => {
-		if (isInitial) {
-			isInitial = false
-			return
-		}
+		dispatch(fetchCartData())
+	}, [dispatch])
 
-		dispatch(sendCartData(cart))
+	useEffect(() => {
+		if (cart.changed) {
+			dispatch(sendCartData(cart))
+		}
 	}, [cart, dispatch])
 
 	return (
