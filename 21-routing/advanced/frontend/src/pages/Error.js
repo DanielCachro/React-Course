@@ -1,5 +1,3 @@
-
-
 import {useRouteError} from 'react-router-dom'
 
 import PageContent from '../components/PageContent'
@@ -29,5 +27,3 @@ export default function ErrorPage() {
 		</>
 	)
 }
-
-
