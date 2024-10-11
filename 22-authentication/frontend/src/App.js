@@ -3,6 +3,8 @@ import {RouterProvider, createBrowserRouter} from 'react-router-dom'
 import EditEventPage from './pages/EditEvent'
 import ErrorPage from './pages/Error'
 import AuthenticationPage, {action as authAction} from './pages/Authentication'
+import {checkAuthLoader, tokenLoader} from './utils/auth'
+import {action as logoutAction} from './pages/Logout'
 import EventDetailPage, {loader as eventDetailLoader, action as deleteEventAction} from './pages/EventDetail'
 import EventsPage, {loader as eventsLoader} from './pages/Events'
 import EventsRootLayout from './pages/EventsRoot'
@@ -17,9 +19,12 @@ const router = createBrowserRouter([
 		path: '/',
 		element: <RootLayout />,
 		errorElement: <ErrorPage />,
+		id: 'root',
+		loader: tokenLoader,
 		children: [
 			{index: true, element: <HomePage />},
 			{path: 'auth', element: <AuthenticationPage />, action: authAction},
+			{path: 'logout', action: logoutAction},
 			{
 				path: 'events',
 				element: <EventsRootLayout />,
@@ -43,6 +48,7 @@ const router = createBrowserRouter([
 								path: 'edit',
 								element: <EditEventPage />,
 								action: manipulateEventAction,
+								loader: checkAuthLoader,
 							},
 						],
 					},
@@ -50,6 +56,7 @@ const router = createBrowserRouter([
 						path: 'new',
 						element: <NewEventPage />,
 						action: manipulateEventAction,
+						loader: checkAuthLoader,
 					},
 				],
 			},
