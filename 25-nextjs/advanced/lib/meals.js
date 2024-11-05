@@ -9,7 +9,6 @@ const db = sql('meals.db')
 export async function getMeals() {
 	await new Promise(resolve => setTimeout(resolve, 2000))
 
-	// throw new Error('Loading meals failed.')
 	return db.prepare('SELECT * FROM meals').all()
 }
 
@@ -31,6 +30,25 @@ export async function saveMeal(meal) {
 			throw new Error('Saving image failed!')
 		}
 	})
+
+	meal.image = `/images/${fileName}`
+
+	db.prepare(
+		`
+		INSERT INTO meals
+			(title, summary, instructions, creator, creator_email, image, slug)
+		VALUES (
+			@title,
+			@summary,
+			@instructions,
+			@creator,
+			@creator_email,
+			@image,
+			@slug
+		)
+		`
+	).run(meal)
 }
+
 
 
